@@ -25,21 +25,23 @@ Otherwise the routes answer 404 and the login form looks as always. Only
 accounts with Panel access get a button. A login still needs the Panel's
 CSRF token, like Kirby's own login route.
 
-## Compared to Kirby Impersonate
+## Similar concepts and plugins
 
-[Kirby Impersonate](https://github.com/nerdcel/kirby-impersonate) (nerdcel)
-solves a different problem; the two work side by side.
-
-|                     | Dev Login                                  | Kirby Impersonate                                          |
-| ------------------- | ------------------------------------------ | ---------------------------------------------------------- |
-| For                 | Skipping the login while you develop       | Admins seeing the Panel as another user, also in production |
-| Where               | Buttons on the login page                  | A button on a user's profile page                          |
-| Needs a login first | No                                         | Yes, as an admin or an allowed role                        |
-| Where it runs       | Only with `debug` on a local host (default) | Everywhere, limited by roles                               |
-| What you get        | A real session of that account             | An impersonation within your session, which you can end    |
-
-Use Dev Login to get into the Panel as anyone in one click on your
-machine; use Impersonate to check what a user sees on a live site.
+- [Kirby Impersonate](https://github.com/nerdcel/kirby-impersonate) by
+  nerdcel: admins (or allowed roles) view the Panel as another user from
+  a button on that user's profile page, also on a live site. You log in
+  first, and the impersonation runs within your own session until you end
+  it. It checks what a user sees; Dev Login skips the login while you
+  develop. The two work side by side.
+- [Kirby Autologin](https://github.com/kirby-deprecated-plugins/kirby-autologin)
+  by Jens Törnell, for Kirby 2 and no longer maintained: on localhost,
+  visiting `/login` or `/login/<username>` logged you into the Panel
+  without a password. Dev Login brings the idea to Kirby 5, with a button
+  per account instead of a URL to know.
+- The Kirby team's [test environment for Kirby itself](https://github.com/getkirby/sandbox)
+  (not a plugin) logs its test accounts in through a URL
+  (`/env/auth/<email>`) and has a dialog in the Panel to switch to
+  another account once you are logged in.
 
 ## Install
 
