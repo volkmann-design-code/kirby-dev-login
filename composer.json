@@ -1,0 +1,55 @@
+{
+    "name": "volkmann-design-code/kirby-dev-login",
+    "description": "One-click login buttons on the Panel login, for local development",
+    "license": "MIT",
+    "type": "kirby-plugin",
+    "version": "0.1.0",
+    "keywords": [
+        "kirby",
+        "kirby-plugin",
+        "kirby-cms",
+        "panel",
+        "login",
+        "development"
+    ],
+    "homepage": "https://github.com/volkmann-design-code/kirby-dev-login",
+    "support": {
+        "docs": "https://github.com/volkmann-design-code/kirby-dev-login/blob/main/README.md",
+        "source": "https://github.com/volkmann-design-code/kirby-dev-login",
+        "issues": "https://github.com/volkmann-design-code/kirby-dev-login/issues"
+    },
+    "authors": [
+        {
+            "name": "Enzo Volkmann",
+            "email": "enzo@volkmann.dev"
+        }
+    ],
+    "require": {
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
+        "getkirby/composer-installer": "^1.2"
+    },
+    "require-dev": {
+        "getkirby/cms": "^5.0",
+        "phpunit/phpunit": "^11.5 || ^12"
+    },
+    "autoload": {
+        "psr-4": {
+            "VolkmannDesignCode\\DevLogin\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "installer-name": "dev-login",
+        "kirby": {
+            "compatible": "^5.0"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "allow-plugins": {
+            "getkirby/composer-installer": true
+        }
+    }
+}

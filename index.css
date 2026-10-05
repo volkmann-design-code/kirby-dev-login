@@ -1,0 +1,24 @@
+.dev-login {
+	margin-top: var(--spacing-6);
+	padding-top: var(--spacing-6);
+	border-top: 1px solid var(--color-border);
+}
+
+.dev-login-label {
+	margin-bottom: var(--spacing-3);
+	font-size: var(--text-sm);
+	font-weight: var(--font-normal);
+	color: var(--color-text-dimmed);
+}
+
+.dev-login-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-2);
+}
+
+/* Kirby's filled buttons are as dark as the dialog in dark mode; the
+   Panel's background stands out from the dialog in both themes */
+.dev-login-buttons .k-button {
+	--button-color-back: var(--panel-color-back);
+}
