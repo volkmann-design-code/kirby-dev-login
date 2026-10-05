@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kirby Dev Login square cover</title>
+<style>
+	/* cover.mjs puts the fonts' @font-face rules here */
+	/*{{fonts}}*/
+
+	/* as cover.html: the Panel's gray and card, Inter for its system font */
+	:root {
+		--back: #efefef;
+		--text: #000;
+		--dimmed: #6b6b6b;
+		--font: "Inter Variable", sans-serif;
+	}
+	* { box-sizing: border-box; margin: 0; }
+	html, body { width: 640px; height: 640px; overflow: hidden; }
+	body {
+		background: var(--back);
+		color: var(--text);
+		font-family: var(--font);
+		display: grid;
+		place-content: center;
+	}
+	.eyebrow {
+		font-size: 20px;
+		color: var(--dimmed);
+		margin-bottom: 12px;
+	}
+	/* above the fade */
+	.eyebrow, h1 {
+		position: relative;
+		z-index: 3;
+	}
+	h1 {
+		font-size: 76px;
+		font-weight: 600;
+		letter-spacing: -0.03em;
+		line-height: 1;
+		margin-bottom: 16px;
+	}
+	.shot {
+		position: relative;
+	}
+	.shot img {
+		display: block;
+		width: 387px; /* the 352 px dialog × 1.1 */
+		border-radius: 9px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06), 0 18px 40px rgba(0, 0, 0, 0.12);
+	}
+	/* the form above the accounts fades into the background */
+	.shot::before {
+		content: "";
+		position: absolute;
+		/* from above the card, so its top edge and shadow fade too */
+		inset: -40px -48px auto;
+		height: calc(55% + 40px);
+		background: linear-gradient(var(--back) 40px, transparent);
+		z-index: 1;
+	}
+	.pointer {
+		position: absolute;
+		width: 30px;
+		z-index: 2;
+		/* cover.mjs sets left and top, as in cover.html */
+		filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, 0.35));
+	}
+</style>
+</head>
+<body>
+	<p class="eyebrow">Kirby plugin</p>
+	<h1>Dev Login</h1>
+	<div class="shot">
+		<!-- the lower part of the real dialog -->
+		<img src="{{dialog}}" alt="">
+		<svg class="pointer" style="{{pointer}}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+			<path d="M11 3.5c1.1 0 2 .9 2 2v9.2l.6-.1c.3-.9 1.1-1.5 2.1-1.5 1.1 0 2 .7 2.1 1.7.4-.5 1-.8 1.7-.8 1.1 0 2 .8 2.2 1.8.4-.4 1-.6 1.6-.6 1.2 0 2.2 1 2.2 2.2v6.1c0 4.1-3.3 7.5-7.5 7.5h-2.3c-2.4 0-4.6-1.1-6-3l-5.2-6.9c-.7-.9-.5-2.2.4-2.9.9-.7 2.1-.6 2.8.2L9 21.1V5.5c0-1.1.9-2 2-2z" fill="#fff" stroke="#000" stroke-width="1.5" stroke-linejoin="round"/>
+			<path d="M15.3 20.5v4.5M18.6 20.5v4.5M21.9 20.5v4.5" stroke="#000" stroke-width="1.3" stroke-linecap="round"/>
+		</svg>
+	</div>
+</body>
+</html>

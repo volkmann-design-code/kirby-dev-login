@@ -123,8 +123,9 @@ composer install    # Kirby into kirby/, PHPUnit
 composer test
 ```
 
-The cover image `.github/cover.png` is rendered from a real Panel with
-made-up accounts, the same on every run (pinned Chromium and fonts):
+The cover images `.github/cover.png` (2:1) and `.github/cover-square.png`
+(1:1) are rendered from a real Panel with made-up accounts, the same on
+every run (pinned Chromium and fonts):
 
 ```sh
 cd .github/cover

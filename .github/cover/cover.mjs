@@ -1,11 +1,16 @@
 /**
- * Renders `.github/cover.png`: 1280 × 640 at 2× (2:1, the format of Kirby's
- * plugin directory and of GitHub's social preview), the same on every run:
+ * Renders the cover images, the same on every run:
  *
- * - a fresh Kirby site (`site/`) with the same made-up accounts, Kirby
- *   being the repository's dev dependency (`composer install`)
- * - pinned Chromium (Playwright) and pinned fonts (Fontsource): Inter
- *   replaces the Panel's system font, JetBrains Mono its monospace one
+ * - `.github/cover.png`: 1280 × 640 at 2× (2:1, the format of Kirby's
+ *   plugin directory and of GitHub's social preview), the whole dialog
+ * - `.github/cover-square.png`: 640 × 640 at 2× (1:1), the lower part of
+ *   the dialog: the accounts, the form above them fading out
+ *
+ * Both show the real Panel login of a fresh Kirby site (`site/`) with the
+ * same made-up accounts, Kirby being the repository's dev dependency
+ * (`composer install`). Pinned Chromium (Playwright) and pinned fonts
+ * (Fontsource): Inter replaces the Panel's system font, JetBrains Mono
+ * its monospace one.
  *
  *   npm ci && npx playwright install chromium && npm run cover
  */
@@ -20,12 +25,13 @@ import { chromium } from "playwright";
 const here = dirname(fileURLToPath(import.meta.url));
 const repo = join(here, "..", "..");
 const site = join(here, "site");
-const out = join(here, "..", "cover.png");
 
-// the dialog appears 1.1 times its size in the cover (cover.html)
-const scale = 1.1;
-// the hand's fingertip in its 30 px wide SVG
-const fingertip = { x: (11 / 32) * 30, y: (3.5 / 32) * 30 };
+// scale: how big the dialog appears (its template's img width / 352 px);
+// pointer: the hand's width; part: the whole dialog or its lower part
+const images = [
+	{ template: "cover.html", out: "cover.png", width: 1280, height: 640, scale: 1.1, pointer: 30, part: "dialog" },
+	{ template: "square.html", out: "cover-square.png", width: 640, height: 640, scale: 1.1, pointer: 30, part: "lower" },
+];
 
 const font = (path, family, weight) => {
 	const file = readFileSync(join(here, "node_modules", path)).toString("base64");
@@ -70,14 +76,13 @@ try {
 		}
 	}
 
-	// 1. the real login dialog, with Inter as the Panel's font
+	// the real login dialog, with Inter as the Panel's font
 	const page = await browser.newPage({ deviceScaleFactor: 2, viewport: { width: 900, height: 900 } });
 	await page.goto(`${base}/panel/login`);
 	await page.addStyleTag({
 		content: `${fonts}
 			:root { --font-sans: "Inter Variable", sans-serif; --font-mono: "JetBrains Mono", monospace; }`,
 	});
-	const dialog = page.locator(".k-login-dialog");
 	const third = page.locator(".dev-login button").nth(2);
 	await third.waitFor();
 	await page.evaluate(async () => {
@@ -85,24 +90,45 @@ try {
 		// no focus ring on the email field
 		document.activeElement?.blur();
 	});
-	const box = await dialog.boundingBox();
+	const dialog = await page.locator(".k-login-dialog").boundingBox();
+	const password = await page.locator(".k-field-name-password .k-input").boundingBox();
 	const button = await third.boundingBox();
-	const shot = await dialog.screenshot({ animations: "disabled", omitBackground: true });
 
-	// 2. the cover: the fingertip in the third button's right edge
-	const tip = {
-		x: (button.x + button.width - box.x - 4) * scale,
-		y: (button.y + button.height / 2 - box.y + 2) * scale,
+	// the parts: the whole dialog, or from the password input to its end
+	const parts = {
+		dialog,
+		lower: { ...dialog, y: password.y, height: dialog.y + dialog.height - password.y },
 	};
-	const html = readFileSync(join(here, "cover.html"), "utf8")
-		.replace("/*{{fonts}}*/", fonts)
-		.replace("{{dialog}}", `data:image/png;base64,${shot.toString("base64")}`)
-		.replace("{{pointer}}", `left: ${(tip.x - fingertip.x).toFixed(1)}px; top: ${(tip.y - fingertip.y).toFixed(1)}px`);
-	const cover = await browser.newPage({ deviceScaleFactor: 2, viewport: { width: 1280, height: 640 } });
-	await cover.setContent(html);
-	await cover.evaluate(() => document.fonts.ready);
-	await cover.screenshot({ path: out, animations: "disabled" });
-	console.log(`${out}, Kirby ${execFileSync("php", ["-r", `echo json_decode(file_get_contents('${join(repo, "kirby", "composer.json")}'))->version;`])}`);
+
+	for (const image of images) {
+		const clip = parts[image.part];
+		const shot = await page.screenshot({ clip, animations: "disabled", omitBackground: true });
+
+		// the fingertip in the third button's right edge
+		const tip = {
+			x: (button.x + button.width - clip.x - 4) * image.scale,
+			y: (button.y + button.height / 2 - clip.y + 2) * image.scale,
+		};
+		const fingertip = { x: (11 / 32) * image.pointer, y: (3.5 / 32) * image.pointer };
+		const html = readFileSync(join(here, image.template), "utf8")
+			.replace("/*{{fonts}}*/", fonts)
+			.replace("{{dialog}}", `data:image/png;base64,${shot.toString("base64")}`)
+			.replace(
+				"{{pointer}}",
+				`left: ${(tip.x - fingertip.x).toFixed(1)}px; top: ${(tip.y - fingertip.y).toFixed(1)}px`,
+			);
+
+		const cover = await browser.newPage({
+			deviceScaleFactor: 2,
+			viewport: { width: image.width, height: image.height },
+		});
+		await cover.setContent(html);
+		await cover.evaluate(() => document.fonts.ready);
+		await cover.screenshot({ path: join(here, "..", image.out), animations: "disabled" });
+		console.log(`.github/${image.out}`);
+	}
+
+	console.log(`Kirby ${JSON.parse(readFileSync(join(repo, "kirby", "composer.json"), "utf8")).version}`);
 } finally {
 	await browser.close();
 	server.kill();
