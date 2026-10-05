@@ -10,6 +10,8 @@ Kirby's login form stays as it is; the buttons sit below it. The plugin
 uses Kirby's own extension point for the login form
 (`panel.plugin(…, { login })`), no DOM patching.
 
+![The Panel's login form with a button per account below it: Mara Lind (Admin), Tom Ruiz (Client), Jonas Weber (Editor), Priya Nair (Editor)](.github/cover.png)
+
 ## Safe by default
 
 The buttons, and the two API routes behind them, only exist when
@@ -117,6 +119,15 @@ Kirby. More languages are welcome as a pull request (`index.php`).
 ```sh
 composer install    # Kirby into kirby/, PHPUnit
 composer test
+```
+
+The cover image `.github/cover.png` is rendered from a real Panel with
+made-up accounts, the same on every run (pinned Chromium and fonts):
+
+```sh
+cd .github/cover
+npm ci && npx playwright install chromium
+npm run cover
 ```
 
 ## License

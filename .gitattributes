@@ -1,4 +1,5 @@
-# not in ZIP downloads and Composer installs
+# not in ZIP downloads and Composer installs (.github/ also holds the
+# cover image and its tooling, which sites don't need)
 .editorconfig export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
