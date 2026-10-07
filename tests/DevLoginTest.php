@@ -54,6 +54,22 @@ class DevLoginTest extends TestCase
 		$this->assertSame(['admin@example.com'], array_column($this->list($kirby)['users'], 'email'));
 	}
 
+	public function testTheDescriptionOptionAddsTheRolesDescription(): void
+	{
+		$this->assertArrayNotHasKey('description', $this->list($this->app())['users'][0]);
+
+		$users = $this->list($this->app([DevLogin::OPTION . '.description' => true]))['users'];
+
+		// Kirby's own for the admin
+		$this->assertSame(['The admin has all rights', 'Edits pages', 'Edits pages'], array_column($users, 'description'));
+	}
+
+	public function testTheCollapseOptionIsPassedOn(): void
+	{
+		$this->assertFalse($this->list($this->app())['collapse']);
+		$this->assertTrue($this->list($this->app([DevLogin::OPTION . '.collapse' => true]))['collapse']);
+	}
+
 	public function testALoginStartsASessionWithoutAPassword(): void
 	{
 		$kirby = $this->app();

@@ -4,6 +4,19 @@
 	border-top: 1px solid var(--color-border);
 }
 
+/* collapsed: the accounts first, the form below them */
+.dev-login[data-collapse="true"] {
+	margin-top: 0;
+	padding-top: 0;
+	border-top: 0;
+}
+
+.dev-login-form {
+	margin-top: var(--spacing-6);
+	padding-top: var(--spacing-6);
+	border-top: 1px solid var(--color-border);
+}
+
 .dev-login-label {
 	margin-bottom: var(--spacing-3);
 	font-size: var(--text-sm);
@@ -19,6 +32,40 @@
 
 /* Kirby's filled buttons are as dark as the dialog in dark mode; the
    Panel's background stands out from the dialog in both themes */
-.dev-login-buttons .k-button {
+.dev-login-buttons .k-button,
+.dev-login-form > .k-button {
 	--button-color-back: var(--panel-color-back);
+}
+
+/* one card per row: the login dialog is narrow */
+.dev-login-cards {
+	grid-template-columns: 1fr;
+}
+
+.dev-login-card {
+	cursor: pointer;
+	border-radius: var(--rounded);
+}
+
+.dev-login-card:hover,
+.dev-login-card:focus-visible {
+	outline: var(--outline);
+}
+
+/* Kirby's cardlet, as tall as its text: a narrow icon column, no row
+   for options, the whole description */
+.dev-login-card .k-item[data-layout="cardlets"] {
+	--item-height: auto;
+	height: 100%;
+	grid-template-areas: "image content";
+	grid-template-columns: var(--height-xl) 1fr;
+	grid-template-rows: auto;
+}
+
+.dev-login-card .k-item[data-layout="cardlets"] .k-item-content {
+	padding-block: var(--spacing-3);
+}
+
+.dev-login-card .k-item[data-layout="cardlets"] .k-item-info {
+	white-space: normal;
 }
