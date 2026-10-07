@@ -91,20 +91,34 @@ return [
 	'volkmann-design-code.dev-login' => [
 		// null (default): on with `debug` on a local host;
 		// or true, false, or fn (Kirby\Cms\App $kirby): bool
-		'enabled' => null,
+		'enabled'     => null,
 		// null (default): every account with Panel access;
 		// or fn (Kirby\Cms\App $kirby): Kirby\Cms\Users|array of emails
-		'users'   => null,
+		'users'       => null,
+		// true: a card per account with its role's description
+		'description' => false,
+		// true: the accounts first, Kirby's login form behind a button
+		'collapse'    => false,
 	],
 ];
 ```
 
 Buttons are sorted by role, then name; each shows the name and, in
-parentheses, the role; the email on hover.
+parentheses, the role (just the name when both are the same); the email
+on hover.
+
+With `description`, each account is a card instead (Kirby's cardlet
+layout) that also shows its role's `description` from the user
+blueprint, for example to explain the roles of a public demo.
+
+With `collapse`, the accounts come first and Kirby's login form opens
+from a button below them ("Log in with email"), for sites where most
+people log in with a click and a few still need the form.
 
 ## How it works
 
-- `GET /api/dev-login`: the accounts (`email`, `name`, `role`)
+- `GET /api/dev-login`: the accounts (`email`, `name`, `role`, and with
+  the `description` option the role's `description`), and `collapse`
 - `POST /api/dev-login` with `email`: `$user->loginPasswordless()`
 - `index.js`: the login form plugin. It renders Kirby's `k-login-form`
   and the buttons below. Written with render functions, so it works

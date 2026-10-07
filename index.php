@@ -13,9 +13,13 @@ Kirby::plugin(
 	extends: [
 		'options' => [
 			// null: on with `debug` on a local host; or true, false, a closure
-			'enabled' => null,
+			'enabled'     => null,
 			// null: every account; or a closure returning users or emails
-			'users'   => null,
+			'users'       => null,
+			// true: a card per account with its role's description
+			'description' => false,
+			// true: the accounts first, Kirby's login form behind a button
+			'collapse'    => false,
 		],
 		'api' => [
 			'routes' => [
@@ -38,8 +42,14 @@ Kirby::plugin(
 			],
 		],
 		'translations' => [
-			'en' => ['volkmann-design-code.dev-login.label' => 'Log in as'],
-			'de' => ['volkmann-design-code.dev-login.label' => 'Anmelden als'],
+			'en' => [
+				'volkmann-design-code.dev-login.label' => 'Log in as',
+				'volkmann-design-code.dev-login.form'  => 'Log in with email',
+			],
+			'de' => [
+				'volkmann-design-code.dev-login.label' => 'Anmelden als',
+				'volkmann-design-code.dev-login.form'  => 'Mit E-Mail anmelden',
+			],
 		],
 	]
 );

@@ -62,18 +62,24 @@ class DevLogin
 	}
 
 	/**
-	 * `GET dev-login`: the buttons
+	 * `GET dev-login`: the buttons; with the `description` option, each
+	 * with its role's description (cards); `collapse`: whether Kirby's
+	 * form waits behind a button
 	 */
 	public static function list(App $kirby): array
 	{
 		static::guard($kirby);
+
+		$description = $kirby->option(static::OPTION . '.description') === true;
 
 		return [
 			'users' => static::users($kirby)->values(fn (User $user) => [
 				'email' => $user->email(),
 				'name'  => $user->name()->or($user->email())->value(),
 				'role'  => $user->role()->title(),
+				...($description === true ? ['description' => $user->role()->description() ?? ''] : []),
 			]),
+			'collapse' => $kirby->option(static::OPTION . '.collapse') === true,
 		];
 	}
 

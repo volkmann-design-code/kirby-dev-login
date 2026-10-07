@@ -3,7 +3,7 @@
     "description": "One-click login buttons on the Panel login, for local development",
     "license": "MIT",
     "type": "kirby-plugin",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "keywords": [
         "kirby",
         "kirby-plugin",

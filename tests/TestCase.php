@@ -70,7 +70,7 @@ abstract class TestCase extends BaseTestCase
 				'sessions' => $this->root . '/sessions',
 			],
 			'blueprints' => [
-				'users/editor' => ['name' => 'editor', 'title' => 'Editor'],
+				'users/editor' => ['name' => 'editor', 'title' => 'Editor', 'description' => 'Edits pages'],
 				'users/client' => ['name' => 'client', 'title' => 'Client', 'permissions' => ['access' => ['panel' => false]]],
 			],
 			'options' => [
